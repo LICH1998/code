@@ -17,6 +17,7 @@ from sklearn import metrics
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import AdaBoostRegressor
 from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import mean_squared_error
 
 from tsfresh import extract_features, select_features
 from tsfresh.utilities.dataframe_functions import roll_time_series, make_forecasting_frame
@@ -31,8 +32,6 @@ xgb.set_config(verbosity=0)
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
-from data_feature import *
 
 plt.rcParams['font.sans-serif'] = ['SimHei']
 
@@ -77,7 +76,7 @@ def xgboot_reg(data, target):
     data = torch.FloatTensor(data.to_numpy())
     target = torch.FloatTensor(target.to_numpy())
     train_x, test_x, train_y, test_y = train_test_split(data, target, test_size=0.3,
-                                                        random_state=random.random(1, 10000))
+                                                        random_state=random.randint(1, 10000))
 
     model = TransAm()
     criterion = nn.MSELoss()
@@ -87,45 +86,29 @@ def xgboot_reg(data, target):
 
     model.train()  # Turn on the train mode
     epochs = 20
-    batch_size = 256
-
-    params = {'booster': 'gbtree',
-              # 'objective': 'binary:logistic',  # binary:logistic
-              # 'eval_metric': 'auc',
-              'objective': 'multi:softmax',  # 多分类的问题
-              'num_class': 2,  # 类别数，与 multisoftmax 并用
-              'max_depth': 6,
-              'lambda': 2,
-              'subsample': 0.75,
-              'colsample_bytree': 0.75,
-              'min_child_weight': 3,
-              'eta': 0.05,
-              'seed': random.randint(1, 10000),
-              'nthread': 8,
-              'gamma': 0.15,
-              'learning_rate': 0.02}
+    batch_size = 128
 
     global bst
     for epoch in range(epochs):
         for batch, i in enumerate(range(0, len(train_x) - 1, batch_size)):
             data, targets = get_batch(train_x, train_y, i, batch_size)
             optimizer.zero_grad()
-            output = model(train_x).detach().numpy()
-            dtrain = xgb.DMatrix(output, label=copy.deepcopy(train_y))
+            output = model(data).detach().numpy()
+            data = output
             # 建模与预测：50棵树
             eval_set = [(test_x, test_y)]
             if epoch:
                 bst.load_model('./model.json')
-                bst = xgb.XGBClassifier(learning_rate=0.01, n_estimators=500, max_depth=5, min_child_weight=3,
+                bst = xgb.XGBClassifier(learning_rate=0.05, n_estimators=500, max_depth=6, min_child_weight=3,
                                         subsample=1, colsample_bytree=1, gamma=0.1, reg_alpha=0.01, reg_lambda=3,
                                         objective='reg:logistic')
-                bst.fit(data, targets, early_stopping_rounds=10, eval_metric="error", eval_set=eval_set, verbose=False)
+                bst.fit(data, targets, eval_metric="rmse", eval_set=eval_set, verbose=False)
                 bst.save_model('./model.json')
             else:
-                bst = xgb.XGBClassifier(learning_rate=0.01, n_estimators=500, max_depth=10, min_child_weight=3,
+                bst = xgb.XGBClassifier(learning_rate=0.05, n_estimators=500, max_depth=6, min_child_weight=3,
                                         subsample=1, colsample_bytree=1, gamma=0.1, reg_alpha=0.01, reg_lambda=3,
                                         objective='reg:logistic')
-                bst.fit(data, targets, early_stopping_rounds=10, eval_metric="error", eval_set=eval_set, verbose=False)
+                bst.fit(data, targets, eval_metric="rmse", eval_set=eval_set, verbose=False)
                 if os.path.exists('./model.json'):
                     os.remove('./model.json')
                 bst.save_model('./model.json')
@@ -139,15 +122,29 @@ def xgboot_reg(data, target):
 
     model.eval()  # Turn on the evaluation mode
     with torch.no_grad():
-        output = model(test_x)
-        dtest = xgb.DMatrix(output)
-        ypred = bst.predict(test_x)
-        y_pred = ypred
-        print('Precesion: %.4f' % metrics.precision_score(test_y, y_pred))
-        print('Recall: %.4f' % metrics.recall_score(test_y, y_pred))
-        print('F1-score: %.4f' % metrics.f1_score(test_y, y_pred))
-        print('Accuracy: %.4f' % metrics.accuracy_score(test_y, y_pred))
-        print('AUC: %.4f' % metrics.roc_auc_score(test_y, ypred))
+        output = model(test_x).detach().numpy()
+        ypred = bst.predict(output)
+        msetest = mean_squared_error(ypred, test_y)
+        print(msetest)
+
+        # y_pred = ypred
+        # print('Precesion: %.4f' % metrics.precision_score(test_y, y_pred))
+        # print('Recall: %.4f' % metrics.recall_score(test_y, y_pred))
+        # print('F1-score: %.4f' % metrics.f1_score(test_y, y_pred))
+        # print('Accuracy: %.4f' % metrics.accuracy_score(test_y, y_pred))
+        # print('AUC: %.4f' % metrics.roc_auc_score(test_y, ypred))
+
+    # output = model(test_x).detach().numpy()
+    # ypred = bst.predict(output)
+    # print("测试集每个样本的得分\n", ypred)
+    # ypred_leaf = bst.predict(output, pred_leaf=True)
+    # print("测试集每棵树所属的节点数\n", ypred_leaf)
+    # ypred_contribs = bst.predict(output, pred_contribs=True)
+    # print("特征的重要性\n", ypred_contribs)
+    #
+    # xgb.plot_importance(bst, height=0.8, title='影响结果的重要特征', ylabel='特征')
+    # plt.rc('font', family='Arial Unicode MS', size=14)
+    # plt.show()
 
 
 if __name__ == "__main__":
@@ -176,8 +173,11 @@ if __name__ == "__main__":
     X = X[X.index.isin(y.index)]
 
     features_filtered_0 = select_features(X, y)
+    # y = df.groupby("symbol").apply(
+    #     lambda x: x.set_index("time")["close"].shift(-1).pct_change().fillna(0)).T.unstack().fillna(method='ffill')
+    # y = y.apply(lambda x: True if x > 0 else False)[y.index.isin(features_filtered_0.index)]
+
     y = df.groupby("symbol").apply(
         lambda x: x.set_index("time")["close"].shift(-1).pct_change().fillna(0)).T.unstack().fillna(method='ffill')
-    y = y.apply(lambda x: True if x > 0 else False)[y.index.isin(features_filtered_0.index)]
-
-xgboot_reg(features_filtered_0, y)
+    y = y[y.index.isin(features_filtered_0.index)]
+    xgboot_reg(features_filtered_0, y)
