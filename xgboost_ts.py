@@ -88,7 +88,7 @@ def data_process(data):
                            colsample_bytree=1,  # 每次拟合一棵树之前，决定使用多少个特征，参数默认1，取值范围(0, 1]。
                            reg_alpha=0,  # 默认为0，控制模型复杂程度的权重值的 L1 正则项参数，参数值越大，模型越不容易过拟合。
                            reg_lambda=1,  # 默认为1，控制模型复杂度的权重值的L2正则化项参数，参数越大，模型越不容易过拟合。
-                           random_state=0)  # 随机种子
+                           random_state=random.randint(1,10000))  # 随机种子
     bst.fit(train_x, train_y, eval_set=[(train_x, train_y)], eval_metric='rmse', verbose=None)
     ans = bst.predict(test_x)
     if ans>0:
