@@ -22,7 +22,6 @@ def max_back(prices):
             max_d = max(max_d, drawdown)
     return max_d
 
-#啊
 # 回测函数
 def backtest(df, seq_close):
     position = 0
