@@ -10,6 +10,7 @@ from xgboost_ts import *
 from tqdm import *
 
 
+# 计算最大回撤
 def max_back(prices):
     max_price = 0
     max_d = 0
@@ -77,6 +78,7 @@ def backtest(df, seq_close):
 df = pd.read_csv('./data1.csv', index_col='bob', parse_dates=True)
 # 传入close变化率
 seq_close = np.array(df['close'].pct_change())
+# 窗口长度设置为200
 df = df.iloc[199:]
 # 进行回测
 annualized_returns, max_drawdown, sharpe_ratio = backtest(df, seq_close)
