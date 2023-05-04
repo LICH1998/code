@@ -69,6 +69,8 @@ def create_inout_sequences(input_data):
 # df['avgBuyPrice'].plot(ax=axes, legend=True, color='red',label='avgBuyPrice')
 # plt.show()
 
+
+
 def data_process(data):
     test_x = data[-input_window:].reshape(1,-1)
     a = create_inout_sequences(data)
