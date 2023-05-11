@@ -179,5 +179,67 @@
 # plt.show()
 
 
+# # 招商银行的文件
+# import pandas as pd
+#
+# # 读取txt文件
+# with open('./招商data/data_ts.txt', 'r') as f:
+#     lines = f.readlines()
+#
+# # 对每一行进行处理
+# results = []
+# column = lines[0].strip().split('\t')
+# print(column)
+#
+# for line in lines[1:]:
+#     # 这里可以添加对每行的处理逻辑
+#     processed_line = line.strip().split('\t')
+#     result = [x for x in processed_line][1:]  # 举例：将每行以逗号分隔的字符串转化为整数列表
+#     results.append(result)
+#
+# data = pd.DataFrame(results,columns=column).sort_values(by='cust_wid',axis=0).reset_index(drop=True)
+# print(data.head())
+# data.to_csv('./招商data/data_ts.csv',index=False)
 
+# import numpy as np
+# a = np.array([2,4,6,8,10])
+# b = np.array([2,4,6,8,10])
+# #只有一个参数表示条件的时候
+# s = np.where((a<5)&(a>1))
+# s = (a<5)
+# print(s)
+
+# import numpy as np
+# a = [True,False]
+# b = [False, False]
+# c = np.array(a)&np.array(b)
+# print(c)
+
+# import pandas as pd
+# import seaborn as sns
+# import matplotlib.pyplot as plt
+#
+# dfs = pd.read_excel('./industry.xlsx', sheet_name=['week', 'month'])
+# df1 = dfs.get('week').set_index('行业名称').drop(['指数代码'], axis=1).T
+# a = df1.corr()
+# print(a)
+# res1 = []
+# res2 = []
+# for i in a.index:
+#     l1 = a[i].nlargest(2).min()
+#     l2 = a[i].nlargest(2).idxmin()
+#     l3 = a[i].nlargest(3).min()
+#     l4 = a[i].nlargest(3).idxmin()
+#     res1.append((i,l1,l2))
+#     res2.append((i,l3,l4))
+# print(res1)
+# print(res2)
+#
+# # 画热力图
+# plt.rcParams['font.sans-serif'] = ['SimHei']  # 黑体
+# plt.rcParams['axes.unicode_minus'] = False    # 解决无法显示符号的问题
+# sns.set(font='SimHei', font_scale=0.8)        # 解决Seaborn中文显示问题
+# ax = sns.heatmap(a, annot=False,linewidths=0.1,linecolor="grey", cmap='RdBu_r')
+# ax.plot()
+# plt.show()
 
