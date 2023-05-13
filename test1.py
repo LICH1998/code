@@ -215,12 +215,13 @@
 # c = np.array(a)&np.array(b)
 # print(c)
 
-# import pandas as pd
-# import seaborn as sns
-# import matplotlib.pyplot as plt
-#
-# dfs = pd.read_excel('./industry.xlsx', sheet_name=['week', 'month'])
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# dfs = pd.read_excel('./行业轮动/industry.xlsx', sheet_name=['week', 'month'])
 # df1 = dfs.get('week').set_index('行业名称').drop(['指数代码'], axis=1).T
+# print(df1.iloc[:5])
 # a = df1.corr()
 # print(a)
 # res1 = []
@@ -243,3 +244,6 @@
 # ax.plot()
 # plt.show()
 
+import numpy as np
+a = np.arange(0, 1.0, 0.1)
+print(a)
