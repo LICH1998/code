@@ -95,7 +95,7 @@
 #
 # group['test'] = group['age'].apply(l, axis=1)
 # print(a)
-
+import numpy as np
 # import numpy as np
 # import pandas as pd
 # import matplotlib.pyplot as plt
@@ -215,9 +215,9 @@
 # c = np.array(a)&np.array(b)
 # print(c)
 
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
+# import pandas as pd
+# import seaborn as sns
+# import matplotlib.pyplot as plt
 
 # dfs = pd.read_excel('./行业轮动/industry.xlsx', sheet_name=['week', 'month'])
 # df1 = dfs.get('week').set_index('行业名称').drop(['指数代码'], axis=1).T
@@ -244,6 +244,49 @@ import matplotlib.pyplot as plt
 # ax.plot()
 # plt.show()
 
-import numpy as np
-a = np.arange(0, 1.0, 0.1)
+# import numpy as np
+# a = np.arange(0, 1.0, 0.1)
+# print(a)
+#
+# import pandas as pd
+# df = pd.DataFrame({'a': [3.0, 2.0, 4.0, 1.0],'b': [1.0, 4.0 , 2.0, 3.0]})
+# print(df)
+# print(df.reindex([1,2]))
+
+# import pandas as pd
+#
+# def normalize_columns(df):
+#     normalized_df = df.apply(lambda x: (x - x.min()) / (x.max() - x.min()))
+#     return normalized_df
+#
+# # 示例用法
+# data = {'col1': [2, 5, 10, 8, 3], 'col2': [1, 6, 9, 4, 7]}
+# df = pd.DataFrame(data)
+# normalized_df = normalize_columns(df)
+# print(normalized_df)
+
+# import pandas as pd
+#
+# data = {'col1': ['apple', 'orange', 'banana', 'apple', 'grape']}
+# df = pd.DataFrame(data)
+#
+# # 替换特定字符串（例如，'apple'）为空值
+# df = df.replace('apple', np.NaN).fillna('100')
+#
+# print(df)
+
+# import pandas as pd
+# import numpy as np
+#
+# a = [1,2,3]
+# b = [1,2,3]
+# c = []
+# c.append(a)
+# c.append(b)
+# c = np.array(c).T
+# d = pd.DataFrame(c,columns=['1','2'])
+# print(d)
+
+a = ['1','2','2']
+a = a + ['3']
 print(a)

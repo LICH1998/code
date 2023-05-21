@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/中信建投/data/301293.SZ.CSV" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/中信建投/data/301307.SZ.CSV" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/中信建投/data/688352.SH.CSV" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/中信建投/data/688433.SH.CSV" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/中信建投/data/688507.SH.CSV" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/中信建投/data/688539.SH.CSV" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/中信建投/data_total/301141.SZ.CSV" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/中信建投/data_total_cmp/301105.SZ.CSV" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/中信建投/data_total_cmp/688525.SH.CSV" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/广发/stock_component/0012.HK.CSV" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/广发/stock_component/001979.SZ.CSV" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/广发/stock_component/002596.SZ.CSV" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/广发/stock_component/0166.HK.CSV" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/广发/stock_component/0400.HK.CSV" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/广发/stock_component/833819.BJ.CSV" charset="GBK" />
+  </component>
+</project>

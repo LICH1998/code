@@ -110,7 +110,8 @@ def calc_percentile(param):
         data.columns = ['code', 'name', 'date', 'high', 'low', 'close', 'volume', 'chg', 'turn']
         data.set_index('date', inplace=True)
         # 前五条数据
-        chg.extend(list(data.iloc[:6]['close'].pct_change()[1:]))
+        res = list(data.iloc[:6]['close'].pct_change()[1:])
+        chg.extend(res)
     stock_percentiles = np.percentile(chg, percentiles * 100)
     print('分位数： ', stock_percentiles)
 
